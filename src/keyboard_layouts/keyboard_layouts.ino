@@ -126,7 +126,7 @@ size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, Ke
     else if(firstByte==0x59) { k=KEY_Y; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Y
     else if(firstByte==0x5A) { k=KEY_Z; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Z
     else if(firstByte==0x5B) { k=KEY_LEFT_BRACE; return 0; } // [
-    else if(firstByte==0x5C) { k=KEY_BACKSLASH; return 0; } // \
+    else if(firstByte==0x5C) { k=KEY_BACKSLASH; return 0; } // '\'
     else if(firstByte==0x5D) { k=KEY_RIGHT_BRACE; return 0; } // ]
     else if(firstByte==0x5E) { k=KEY_6; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // ^
     else if(firstByte==0x5F) { k=KEY_MINUS; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // _
@@ -136,7 +136,7 @@ size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, Ke
     else if(firstByte==0x59) { k=KEY_Z; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Y
     else if(firstByte==0x5A) { k=KEY_Y; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Z    
     else if(firstByte==0x5B) { k=KEY_8; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // [
-    else if(firstByte==0x5C) { k=KEY_MINUS; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // \
+    else if(firstByte==0x5C) { k=KEY_MINUS; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // '\'
     else if(firstByte==0x5D) { k=KEY_9; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ]
     else if(firstByte==0x5E) { k=KEY_TILDE; return 0; } // ^    
     else if(firstByte==0x5F) { k=KEY_SLASH; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // _    
