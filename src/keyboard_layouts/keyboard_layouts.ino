@@ -53,8 +53,6 @@ size_t Keyboard_write(KeyboardKeycode k, KeyboardModifier modifier)
 size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, KeyboardModifier & modifier)
 {
   modifier=KEYMODIF_NONE;
-
-  Serial.println("conutf");
       
   if(ch.length()==1)
   {
@@ -114,7 +112,7 @@ size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, Ke
 #endif
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
     else if(firstByte==0x3A) { k=KEY_PERIOD; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // :    
-    else if(firstByte==0x3B) { KEY_COMMA; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // ;    
+    else if(firstByte==0x3B) { k=KEY_COMMA; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // ;    
     else if(firstByte==0x3C) { k=KEY_NON_US; return 0; } // <    
     else if(firstByte==0x3D) { k=KEY_0; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // =    
     else if(firstByte==0x3E) { k=KEY_NON_US; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // >    
@@ -135,9 +133,9 @@ size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, Ke
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
     else if(firstByte==0x59) { k=KEY_Z; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Y
     else if(firstByte==0x5A) { k=KEY_Y; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Z    
-    else if(firstByte==0x5B) { k=KEY_8; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // [
-    else if(firstByte==0x5C) { k=KEY_MINUS; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // '\'
-    else if(firstByte==0x5D) { k=KEY_9; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ]
+    else if(firstByte==0x5B) { k=KEY_8; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // [
+    else if(firstByte==0x5C) { k=KEY_MINUS; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // '\'
+    else if(firstByte==0x5D) { k=KEY_9; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ]
     else if(firstByte==0x5E) { k=KEY_TILDE; return 0; } // ^    
     else if(firstByte==0x5F) { k=KEY_SLASH; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // _    
     else if(firstByte==0x60) { k=KEY_EQUAL; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // `
@@ -154,10 +152,10 @@ size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, Ke
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
     else if(firstByte==0x79) { k=KEY_Z; return 0; } // y
     else if(firstByte==0x7A) { k=KEY_Y; return 0; } // z
-    else if(firstByte==0x7B) { k=KEY_7; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // {    
-    else if(firstByte==0x7C) { k=KEY_NON_US; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // |
-    else if(firstByte==0x7D) { k=KEY_0; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // }    
-    else if(firstByte==0x7E) { k=KEY_RIGHT_BRACE; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ~
+    else if(firstByte==0x7B) { k=KEY_7; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // {    
+    else if(firstByte==0x7C) { k=KEY_NON_US; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // |
+    else if(firstByte==0x7D) { k=KEY_0; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // }    
+    else if(firstByte==0x7E) { k=KEY_RIGHT_BRACE; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ~
 #endif
     else if(firstByte==0x7F) { k=KEY_DELETE; return 0; } // DEL(Entf)
   }
@@ -165,19 +163,22 @@ size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, Ke
   {
     byte firstByte=ch.charAt(0);
     byte secondByte=ch.charAt(1);
+    //Serial.println("2bytes");
+    //Serial.println(firstByte, HEX);
+    //Serial.println(secondByte, HEX);
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
     if(firstByte==0xC2 && secondByte==0xA7) { k=KEY_3; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // §
-    else if(firstByte==0xC2 && secondByte==0xB2) { k=KEY_2; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ²
-    else if(firstByte==0xC2 && secondByte==0xB3) { k=KEY_3; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ³
+    else if(firstByte==0xC2 && secondByte==0xB2) { k=KEY_2; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ²
+    else if(firstByte==0xC2 && secondByte==0xB3) { k=KEY_3; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // ³
     else if(firstByte==0xC2 && secondByte==0xB4) { k=KEY_EQUAL; return 0; } // ´
-    else if(firstByte==0xC2 && secondByte==0xB5) { k=KEY_M; (KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // µ
-    else if(firstByte==0xC2 && secondByte==0xBA) { k=KEY_TILDE; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // °
+    else if(firstByte==0xC2 && secondByte==0xB5) { k=KEY_M; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // µ
+    else if(firstByte==0xC2 && secondByte==0xB0) { k=KEY_TILDE; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // ° (Degree) // 0xC2 0xBA 'MASCULINE ORDINAL INDICATOR' locks the same!
     else if(firstByte==0xC3 && secondByte==0x84) { k=KEY_QUOTE; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Ä
-    else if(firstByte==0xC3 && secondByte==0x96) { k=KEY_PERIOD; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Ö
+    else if(firstByte==0xC3 && secondByte==0x96) { k=KEY_SEMICOLON; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Ö
     else if(firstByte==0xC3 && secondByte==0x9C) { k=KEY_LEFT_BRACE; modifier=KEYMODIF_LEFT_SHIFT; return 0; } // Ü
     else if(firstByte==0xC3 && secondByte==0x9F) { k=KEY_MINUS; return 0; } // ß
     else if(firstByte==0xC3 && secondByte==0xA4) { k=KEY_QUOTE; return 0; } // ä
-    else if(firstByte==0xC3 && secondByte==0xB6) { k=KEY_PERIOD; return 0; } // ö
+    else if(firstByte==0xC3 && secondByte==0xB6) { k=KEY_SEMICOLON; return 0; } // ö
     else if(firstByte==0xC3 && secondByte==0xBC) { k=KEY_LEFT_BRACE; return 0; } // ü
 #endif
   }
@@ -188,10 +189,10 @@ size_t Keyboard_convertUtf8CharacterToKeycode(String ch, KeyboardKeycode & k, Ke
     byte thirdByte=ch.charAt(2);
 
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
-    Serial.println("fb");
-    Serial.println(firstByte, HEX);
-    Serial.println(secondByte, HEX);
-    Serial.println(thirdByte, HEX);
+    //Serial.println("fb");
+    //Serial.println(firstByte, HEX);
+    //Serial.println(secondByte, HEX);
+    //Serial.println(thirdByte, HEX);
     if(firstByte==0xE2 && secondByte==0x82 && thirdByte==0xAC) { k=KEY_E; modifier=(KeyboardModifier)(KEYMODIF_LEFT_CTRL|KEYMODIF_LEFT_ALT); return 0; } // €
 #endif
   } 
@@ -203,11 +204,11 @@ void Keyboard_writeUtf8Character(const String & ch)
 {
   KeyboardKeycode k=KEY_RESERVED;//invalid
   KeyboardModifier modifier=KEYMODIF_NONE;
-  Keyboard_convertUtf8CharacterToKeycode(ch, k, modifier);//todo retval pruefen
-  Serial.print("wutf ");
-  Serial.print(k);
-  Serial.print(" ");
-  Serial.println(modifier);
+  Keyboard_convertUtf8CharacterToKeycode(ch, k, modifier);//todo: check retval
+  //Serial.print("wutf ");
+  //Serial.print(k);
+  //Serial.print(" ");
+  //Serial.println(modifier);
   Keyboard_write(k, modifier);
 }
 
@@ -271,22 +272,16 @@ void loop()
 {
   if (digitalRead(buttonPin) == 0)  // if the button goes low
   {
-    Keyboard_writeUtf8Character("Q");
+    Serial.println("button low");
+    Keyboard_writeUtf8Character("²");
     Keyboard_writeUtf8Character("€");
     Keyboard_writeUtf8Character("y");
-    Serial.println("1");
-    Keyboard_writeUtf8Character("Z");
-    Serial.println("2");
     Keyboard_writeUtf8Character("$");
-    Serial.println("3");
     Keyboard_writeUtf8Character("#");
-    Serial.println("4");
     Keyboard_writeUtf8Character("0");
     Keyboard_writeUtf8Character("1");
-    Keyboard_writeUtf8Character("8");
-    Keyboard_writeUtf8Character("9");
- 
-    Keyboard_writeUtf8String("^°1!2²\"3§³4$5%6&7/{8([9)]0=}ß?\\´`qQ@wWeE€rRtTzZuUiIoOpPüÜ+*~aAsSdDfFgGhHjJkKlLöÖäÄ#'<>|yYxXcCvVbBnNmM,;.:-_");
+
+    Keyboard_writeUtf8String(" ^°1!2²\"3§³4$5%6&7/{8([9)]0=}ß?\\´`qQ@wWeE€rRtTzZuUiIoOpPüÜ+*~aAsSdDfFgGhHjJkKlLöÖäÄ#'<>|yYxXcCvVbBnNmMµ,;.:-_");
    
     delay(1000);  // delay so there aren't a kajillion z's
   }
