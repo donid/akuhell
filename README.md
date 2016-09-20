@@ -37,3 +37,10 @@ This repository contains the code that I came up with, but there are some caveat
 So, proposals on how to improve the code are welcome!
 
 To compile this, I used the Arduino IDE 1.6.11 and the "HID-Project" library 2.4.3
+
+
+
+Build Status:
+
+[![Build status](https://ci.appveyor.com/api/projects/status/dn8aw7grml3f3ry4/branch/master?svg=true)](https://ci.appveyor.com/project/donid/akuhell/branch/master)
+

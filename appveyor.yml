@@ -1,0 +1,32 @@
+version: 1.0.{build}
+init:
+- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+install:
+- ps: >-
+    (New-Object Net.WebClient).DownloadFile('http://downloads.arduino.cc/arduino-1.6.11-windows.zip', 'C:\projects\arduino.zip')
+
+
+    Expand-Archive C:\projects\arduino.zip -dest C:\projects\arduino\
+
+
+
+    (New-Object Net.WebClient).DownloadFile('http://downloads.arduino.cc/libraries/NicoHood/HID_Project-2.4.3.zip', 'C:\projects\hidproject.zip')
+
+
+    Expand-Archive C:\projects\hidproject.zip -dest C:\projects\hidproject\
+
+
+    $mydocuments = [environment]::getfolderpath("mydocuments")
+
+    Copy-Item 'C:\projects\hidproject\HID_Project-2.4.3' 'C:\projects\arduino\arduino-1.6.11\libraries\HID-Project' -recurse
+build_script:
+- cmd: >-
+    cd C:\projects\arduino\arduino-1.6.11
+
+
+    rem arduino_debug.exe --install-library "HID-Project"
+
+    rem powershell Start-Sleep -Seconds 60000
+
+
+    arduino_debug.exe --verify --board arduino:avr:leonardo --verbose-build C:\projects\akuhell\src\keyboard_layouts\keyboard_layouts.ino
