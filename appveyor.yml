@@ -30,3 +30,5 @@ build_script:
 
 
     arduino_debug.exe --verify --board arduino:avr:leonardo --verbose-build C:\projects\akuhell\src\keyboard_layouts\keyboard_layouts.ino
+    
+    arduino_debug.exe --verify --board arduino:avr:leonardo --verbose-build C:\projects\akuhell\src\abauk\abauk.ino
