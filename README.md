@@ -39,6 +39,10 @@ So, proposals on how to improve the code are welcome!
 
 To compile this, I used the Arduino IDE 1.6.11 and the "HID-Project" library 2.4.3
 
+Update: A quick test with Arduino IDE 1.8.1 and "HID-Project" library 2.4.4 yielded
+the same results for the provided sample code.
+
+
 # akaub
 - Android
 - Keyboard
