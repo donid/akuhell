@@ -201,6 +201,8 @@ size_t Keyboard_convertUtf8CharacterToKeycode(const String & ch, KeyboardKeycode
     //Serial.println(secondByte, HEX);
     //Serial.println(thirdByte, HEX);
     if(firstByte==0xE2 && secondByte==0x82 && thirdByte==0xAC) { k=KEY_E; modifier=altGrModifier; return 0; } // €
+    // untested - will probably only work on windows 10 hosts - altgr+shit+ß yields a capital ß
+    if(firstByte==0xE1 && secondByte==0xBA && thirdByte==0x9E) { k=KEY_E; modifier=altGrModifier|KeyModifier::leftShift; return 0; } // ẞ Unicode Character 'LATIN CAPITAL LETTER SHARP S' (U+1E9E)
 #endif
   } 
   

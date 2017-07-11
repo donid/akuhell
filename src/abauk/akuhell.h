@@ -13,6 +13,7 @@ enum struct KeyModifier : uint8_t
   leftShift = 2,
   leftAlt = 4,
   leftWindows = 8,
+  altGr = 64, // it seems that altGr cannot be replaced with Ctrl+Alt for Linux hosts: see Issue#1
 };
 
 KeyModifier operator| (KeyModifier lhs,KeyModifier rhs)
@@ -43,7 +44,11 @@ size_t Keyboard_write(KeyboardKeycode k, KeyModifier modifier)
   {
     Keyboard.press(KEY_LEFT_WINDOWS);
   }
-
+  if ((modifier & KeyModifier::altGr)==KeyModifier::altGr) // see Issue#1
+  {
+    Keyboard.press(KEY_RIGHT_ALT);
+  }
+  
   Keyboard.press(k);
   Keyboard.releaseAll();//todo: library-version of write calls release only when retval of press!=0 and returns retval
 }
@@ -53,7 +58,9 @@ size_t Keyboard_write(KeyboardKeycode k, KeyModifier modifier)
 size_t Keyboard_convertUtf8CharacterToKeycode(const String & ch, KeyboardKeycode & k, KeyModifier & modifier)
 {
   modifier=KeyModifier::none;
-      
+  //const KeyModifier altGrModifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt);
+  const KeyModifier altGrModifier=KeyModifier::altGr; // see Issue#1
+  
   if(ch.length()==1)
   {
     char firstByte=ch.charAt(0);
@@ -117,7 +124,7 @@ size_t Keyboard_convertUtf8CharacterToKeycode(const String & ch, KeyboardKeycode
     else if(firstByte==0x3D) { k=KEY_0; modifier=KeyModifier::leftShift; return 0; } // =    
     else if(firstByte==0x3E) { k=KEY_NON_US; modifier=KeyModifier::leftShift; return 0; } // >    
     else if(firstByte==0x3F) { k=KEY_MINUS; modifier=KeyModifier::leftShift; return 0; } // ?    
-    else if(firstByte==0x40) { k=KEY_Q; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // @
+    else if(firstByte==0x40) { k=KEY_Q; modifier=altGrModifier; return 0; } // @
 #endif
     else if(firstByte>=0x41&&firstByte<=0x58) { k=(KeyboardKeycode)(KEY_A+(firstByte-0x41)); modifier=KeyModifier::leftShift; return 0; } // A to X
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_EN_US
@@ -133,9 +140,9 @@ size_t Keyboard_convertUtf8CharacterToKeycode(const String & ch, KeyboardKeycode
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
     else if(firstByte==0x59) { k=KEY_Z; modifier=KeyModifier::leftShift; return 0; } // Y
     else if(firstByte==0x5A) { k=KEY_Y; modifier=KeyModifier::leftShift; return 0; } // Z    
-    else if(firstByte==0x5B) { k=KEY_8; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // [
-    else if(firstByte==0x5C) { k=KEY_MINUS; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // '\'
-    else if(firstByte==0x5D) { k=KEY_9; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // ]
+    else if(firstByte==0x5B) { k=KEY_8; modifier=altGrModifier; return 0; } // [
+    else if(firstByte==0x5C) { k=KEY_MINUS; modifier=altGrModifier; return 0; } // '\'
+    else if(firstByte==0x5D) { k=KEY_9; modifier=altGrModifier; return 0; } // ]
     else if(firstByte==0x5E) { k=KEY_TILDE; return 0; } // ^    
     else if(firstByte==0x5F) { k=KEY_SLASH; modifier=KeyModifier::leftShift; return 0; } // _    
     else if(firstByte==0x60) { k=KEY_EQUAL; modifier=KeyModifier::leftShift; return 0; } // `
@@ -152,10 +159,10 @@ size_t Keyboard_convertUtf8CharacterToKeycode(const String & ch, KeyboardKeycode
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
     else if(firstByte==0x79) { k=KEY_Z; return 0; } // y
     else if(firstByte==0x7A) { k=KEY_Y; return 0; } // z
-    else if(firstByte==0x7B) { k=KEY_7; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // {    
-    else if(firstByte==0x7C) { k=KEY_NON_US; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // |
-    else if(firstByte==0x7D) { k=KEY_0; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // }    
-    else if(firstByte==0x7E) { k=KEY_RIGHT_BRACE; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // ~
+    else if(firstByte==0x7B) { k=KEY_7; modifier=altGrModifier; return 0; } // {    
+    else if(firstByte==0x7C) { k=KEY_NON_US; modifier=altGrModifier; return 0; } // |
+    else if(firstByte==0x7D) { k=KEY_0; modifier=altGrModifier; return 0; } // }    
+    else if(firstByte==0x7E) { k=KEY_RIGHT_BRACE; modifier=altGrModifier; return 0; } // ~
 #endif
     else if(firstByte==0x7F) { k=KEY_DELETE; return 0; } // DEL(Entf)
   }
@@ -168,11 +175,11 @@ size_t Keyboard_convertUtf8CharacterToKeycode(const String & ch, KeyboardKeycode
     //Serial.println(secondByte, HEX);
 #if KEYBOARD_LAYOUT_LANG == KBD_LAYOUT_DE_DE
     if(firstByte==0xC2 && secondByte==0xA7) { k=KEY_3; modifier=KeyModifier::leftShift; return 0; } // §
-    else if(firstByte==0xC2 && secondByte==0xB2) { k=KEY_2; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // ²
-    else if(firstByte==0xC2 && secondByte==0xB3) { k=KEY_3; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // ³
+    else if(firstByte==0xC2 && secondByte==0xB2) { k=KEY_2; modifier=altGrModifier; return 0; } // ²
+    else if(firstByte==0xC2 && secondByte==0xB3) { k=KEY_3; modifier=altGrModifier; return 0; } // ³
     else if(firstByte==0xC2 && secondByte==0xB4) { k=KEY_EQUAL; return 0; } // ´
-    else if(firstByte==0xC2 && secondByte==0xB5) { k=KEY_M; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // µ
-    else if(firstByte==0xC2 && secondByte==0xB0) { k=KEY_TILDE; modifier=KeyModifier::leftShift; return 0; } // ° (Degree) // 0xC2 0xBA 'MASCULINE ORDINAL INDICATOR' locks the same!
+    else if(firstByte==0xC2 && secondByte==0xB5) { k=KEY_M; modifier=altGrModifier; return 0; } // µ
+    else if(firstByte==0xC2 && secondByte==0xB0) { k=KEY_TILDE; modifier=KeyModifier::leftShift; return 0; } // ° (Degree) // 0xC2 0xBA 'MASCULINE ORDINAL INDICATOR' looks the same!
     else if(firstByte==0xC3 && secondByte==0x84) { k=KEY_QUOTE; modifier=KeyModifier::leftShift; return 0; } // Ä
     else if(firstByte==0xC3 && secondByte==0x96) { k=KEY_SEMICOLON; modifier=KeyModifier::leftShift; return 0; } // Ö
     else if(firstByte==0xC3 && secondByte==0x9C) { k=KEY_LEFT_BRACE; modifier=KeyModifier::leftShift; return 0; } // Ü
@@ -193,7 +200,9 @@ size_t Keyboard_convertUtf8CharacterToKeycode(const String & ch, KeyboardKeycode
     //Serial.println(firstByte, HEX);
     //Serial.println(secondByte, HEX);
     //Serial.println(thirdByte, HEX);
-    if(firstByte==0xE2 && secondByte==0x82 && thirdByte==0xAC) { k=KEY_E; modifier=(KeyModifier::leftCtrl|KeyModifier::leftAlt); return 0; } // €
+    if(firstByte==0xE2 && secondByte==0x82 && thirdByte==0xAC) { k=KEY_E; modifier=altGrModifier; return 0; } // €
+    // untested - will probably only work on windows 10 hosts - altgr+shit+ß yields a capital ß
+    if(firstByte==0xE1 && secondByte==0xBA && thirdByte==0x9E) { k=KEY_E; modifier=altGrModifier|KeyModifier::leftShift; return 0; } // ẞ Unicode Character 'LATIN CAPITAL LETTER SHARP S' (U+1E9E)
 #endif
   } 
   

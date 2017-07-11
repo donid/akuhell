@@ -33,7 +33,7 @@ void loop()
     Keyboard_writeUtf8Character("0");
     Keyboard_writeUtf8Character("1");
 
-    Keyboard_writeUtf8String(" ^°1!2²\"3§³4$5%6&7/{8([9)]0=}ß?\\´`qQ@wWeE€rRtTzZuUiIoOpPüÜ+*~aAsSdDfFgGhHjJkKlLöÖäÄ#'<>|yYxXcCvVbBnNmMµ,;.:-_");
+    Keyboard_writeUtf8String(" ^°1!2²\"3§³4$5%6&7/{8([9)]0=}ß?\\´`qQ@wWeE€rRtTzZuUiIoOpPüÜ+*~aAsSdDfFgGhHjJkKlLöÖäÄ#'<>|yYxXcCvVbBnNmMµ,;.:-_ẞ"); // last character is 'LATIN CAPITAL LETTER SHARP S'
    
     delay(1000);
   }
